@@ -1,0 +1,7 @@
+
+*.o
+*.obj
+
+[Bb]uild/
+[Tt]emp/
+[Tt]mp/
