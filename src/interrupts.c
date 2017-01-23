@@ -1,5 +1,11 @@
 #include "stm32l0xx.h"
 
+void SysTick_Handler(void)
+{
+extern uint32_t _SysTick;
+	++_SysTick;
+}
+
 void DMA1_Channel2_3_IRQHandler(void)
 {
 	if( 0 != (DMA1->ISR & DMA_ISR_TCIF2) ) {
@@ -7,4 +13,3 @@ void DMA1_Channel2_3_IRQHandler(void)
 		DMA1_Channel2->CCR &= ~DMA_CCR_EN;
 	}
 }
-

@@ -2,6 +2,8 @@
 
 #include "stm32l0xx.h"
 
+uint32_t _SysTick = 0;
+
 #if defined(__GNUC__)
 __attribute__((__always_inline__))
 #endif /* __GNUC__ */
@@ -132,6 +134,8 @@ void
 peripherals_init(void)
 {
 	//SystemCoreClockUpdate();
+#warning FIXME: hardcode for debug;
+	SysTick_Config(2100000/1000); /* 1 ms */
 	configreGPIO();
 	configreUSART1withDMA();
 
