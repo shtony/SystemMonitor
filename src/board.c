@@ -1,6 +1,7 @@
 #include <stddef.h>
 
 #include "stm32l0xx.h"
+#include "board.h"
 
 uint32_t _SysTick = 0;
 
@@ -146,24 +147,22 @@ peripherals_init(void)
 	usart1_transmit_with_dma(test_msg, sizeof(test_msg));
 }
 
-static void
-delay(void)
-{
-    const uint32_t cnt = 100000;
-
-    volatile uint32_t i = cnt;
-    while (i > 0) {
-        --i;
-    }
-}
-
 void
 main_loop(void)
 {
+	uint32_t previousMillis = 0;
+	uint32_t currentMillis;
+
 	for (;;) {
-		delay();
-		GPIOB->ODR ^= GPIO_ODR_OD5;
-		GPIOB->ODR ^= GPIO_ODR_OD4;
+		currentMillis = get_systick();
+
+		if(currentMillis - previousMillis >= 200) {
+			previousMillis = currentMillis;
+
+			GPIOB->ODR ^= GPIO_ODR_OD5;
+			GPIOB->ODR ^= GPIO_ODR_OD4;
+		}
+
 		uart_print(test_msg, sizeof(test_msg));
 	}
 }
