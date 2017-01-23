@@ -37,6 +37,7 @@ set(SRCS
     "${CMAKE_SOURCE_DIR}/src/main.c"
     "${CMAKE_SOURCE_DIR}/src/board.c"
     "${CMAKE_SOURCE_DIR}/src/interrupts.c"
+    "${CMAKE_SOURCE_DIR}/src/protocol.c"
 )
 
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")
