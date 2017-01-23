@@ -12,7 +12,7 @@ configreGPIO(void)
 
 	RCC->IOPENR |= RCC_IOPENR_GPIOAEN | RCC_IOPENR_GPIOBEN;
 
-	/* GPIOA*/
+	/* GPIOA */
 	val32 = GPIOA->AFR[1];
 	val32 = (val32 & ~( 0xFF << (4 * (9 - 8)) )) | ( 0x04 << (4 * (9 - 8)) ); /* GPIOA_9: AF4 -- USART1_TX */
 	GPIOA->AFR[1] = val32;
@@ -21,8 +21,36 @@ configreGPIO(void)
 	val32 = (val32 & ~GPIO_MODER_MODE9) | GPIO_MODER_MODE9_1;
 	GPIOA->MODER = val32;
 
+	/* GPIOB */
+	//val32 = GPIOB->PUPDR;
+	val32 = 0; /* No pull-up, No pull-down*/
+	val32 = (val32 & ~GPIO_PUPDR_PUPD15) | GPIO_PUPDR_PUPD15_0; /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD14) | GPIO_PUPDR_PUPD14_0; /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD13) | GPIO_PUPDR_PUPD13_0; /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD12) | GPIO_PUPDR_PUPD12_0; /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD11) | GPIO_PUPDR_PUPD11_0; /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD10) | GPIO_PUPDR_PUPD10_0; /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD9)  | GPIO_PUPDR_PUPD9_0;  /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD8)  | GPIO_PUPDR_PUPD8_0;  /* GPIOB_0: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD7)  | GPIO_PUPDR_PUPD7_0;  /* GPIOB_7: Pull-up -- I2C1_SDA */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD6)  | GPIO_PUPDR_PUPD6_0;  /* GPIOB_6: Pull-up -- I2C1_SCL */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD3)  | GPIO_PUPDR_PUPD3_0;  /* GPIOB_3: Pull-up -- PowerLED_MB (input) */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD2)  | GPIO_PUPDR_PUPD2_0;  /* GPIOB_2: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD1)  | GPIO_PUPDR_PUPD1_0;  /* GPIOB_1: Pull-up -- UNUSED pin */
+	val32 = (val32 & ~GPIO_PUPDR_PUPD0)  | GPIO_PUPDR_PUPD0_0;  /* GPIOB_0: Pull-up -- UNUSED pin */
+	GPIOB->PUPDR = val32;
+
+	val32 = GPIOB->AFR[0];
+	val32 = (val32 & ~( 0xFF << (4 * 7) )) | ( 0x01 << (4 * 7) ); /* GPIOB_7: AF1 -- I2C1_SDA */
+	val32 = (val32 & ~( 0xFF << (4 * 6) )) | ( 0x01 << (4 * 6) ); /* GPIOB_6: AF1 -- I2C1_SCL */
+	GPIOB->AFR[0] = val32;
+
 	val32 = GPIOB->MODER;
+	val32 = (val32 & ~GPIO_MODER_MODE7) | GPIO_MODER_MODE7_1; /* GPIOB_7: I2C1_SDA */
+	val32 = (val32 & ~GPIO_MODER_MODE6) | GPIO_MODER_MODE6_1; /* GPIOB_6: I2C1_SCL */
 	val32 = (val32 & ~GPIO_MODER_MODE5) | GPIO_MODER_MODE5_0; /* GPIOB_5: OutRedLED_Drv */
+	val32 = (val32 & ~GPIO_MODER_MODE4) | GPIO_MODER_MODE4_0; /* GPIOB_4: OutGreenLED_Drv */
+	val32 = (val32 & ~GPIO_MODER_MODE3); /* GPIOB_3: PowerLED_MB (input) */
 	GPIOB->MODER = val32;
 }
 
@@ -131,7 +159,7 @@ main_loop(void)
 	for (;;) {
 		delay();
 		GPIOB->ODR ^= GPIO_ODR_OD5;
-		//GPIOB->ODR ^= GPIO_ODR_OD4;
+		GPIOB->ODR ^= GPIO_ODR_OD4;
 		uart_print(test_msg, sizeof(test_msg));
 	}
 }
